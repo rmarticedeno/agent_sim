@@ -16,6 +16,8 @@ class Environment:
         self.t = t
         self.moment = 0
 
+        self.corrales()
+
         if not childs:
             #self.childs = [ Child ] * self.n_childs 
             #self.robot = Robot()
@@ -54,3 +56,12 @@ class Environment:
         while ( count / total < percent):
             generate(self.board, obj)
             count +=1  
+
+    def corrales(self):
+        large = max(self.rows, self.columns)
+
+        for i in range(self.n_childs):
+            if large == self.rows:
+                self.board[i][0] = Corral
+            else:
+                self.board[0][i] = Corral
