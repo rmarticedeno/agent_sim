@@ -53,8 +53,10 @@ class Environment:
 
         total = self.rows * self.columns
 
+        actioners = self.childs + [self.robot]
+
         while ( count / total < percent):
-            generate(self.board, obj)
+            generate(self.board, actioners, obj)
             count +=1  
 
     def corrales(self):
