@@ -1,5 +1,6 @@
 from random import randint
 from utils import Empty, Dirty, Dirty, Corral, Obstacle, generate
+from utils import Up, Down, Left, Right, Stay, dx, dy
 
 
 
