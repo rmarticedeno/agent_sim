@@ -1,6 +1,8 @@
 from random import randint
 from utils import Empty, Dirty, Dirty, Corral, Obstacle, generate
 from utils import Up, Down, Left, Right, Stay, dx, dy
+from child import Child
+from robot import Robot
 
 
 
@@ -19,18 +21,20 @@ class Environment:
         self.corrales()
 
         if not childs:
-            #self.childs = [ Child ] * self.n_childs 
-            #self.robot = Robot()
-            pass
+            self.childs = []
+            
+            for _ in range(self.n_childs):
+                self.childs.append(Child(self.board, self.childs))
+            self.robot = Robot(self.board, self.childs)
             
         else:
             self.childs = childs
             self.robot = robot
 
             for i in range(len(self.childs)):
-                #self.childs[i].shuffle()
-                pass
-            #self.robot.shuffle()
+                actioners = self.childs
+                self.childs[i].shuffle(self.board, actioners)
+            self.robot.shuffle(self.board, self.childs)
             
 
         self.gend(dirty)
