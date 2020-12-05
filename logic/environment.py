@@ -1,7 +1,7 @@
 from random import randint
+from utils import Empty, Dirty, Dirty, Corral, Obstacle, generate
 
 
-Empty, Dirty, Corral, Obstacle, Chilren, Robot = range(6)
 
 
 class Environment:
@@ -51,9 +51,5 @@ class Environment:
         total = self.rows * self.columns
 
         while ( count / total < percent):
-            i = randint(0, self.rows-1)
-            j = randint(0, self.columns-1)
-
-            if self.board[i][j] == Empty:
-                self.board[i][j] = obj
-                count +=1  
+            generate(self.board, obj)
+            count +=1  
