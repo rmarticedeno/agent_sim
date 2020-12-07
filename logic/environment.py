@@ -14,9 +14,19 @@ class Environment:
         self.columns = columns
         self.n_childs = n_childs
         self.n_cunas = n_childs
-        self.board = [ [Empty] * columns for i in range(rows)]
+        self.init_dirty = dirty
+        self.init_obst = obstacles
         self.t = t
-        self.moment = 0
+
+    def reset(self, dirty, obstacles, childs = None, robot = None, complete=False):
+        if complete:
+            self.moment = 0
+            self.tie = False
+            self.lost = False
+            self.win = False
+            self.ended = False
+
+        self.board = [ [Empty] * self.columns for i in range(self.rows)]
 
         self.corrales()
 
@@ -46,6 +56,68 @@ class Environment:
         self.gend(dirty)
 
         self.geno(obstacles)
+
+    def simulate(self):
+        self.reset(self.init_dirty, self.init_obst, complete=True)
+
+        while (self.moment < 100*self.t):
+            if self.object_percent(Dirty) >= 0.6:
+                self.lost = True
+                break
+            
+            for child in self.childs:
+                if not child.is_in_corral:
+                    break
+            else:
+                dirty = False
+                for i in self.rows:
+                    for j in self.columns:
+                        if self.board[i][j] == Dirty:
+                            dirty = True
+                            break
+                    if dirty:
+                        break
+                else:
+                    self.win = True
+                    break
+            
+            move = self.robot.move(self)
+
+            self.make_robot_move(move)
+
+            for i in range(self.n_childs):
+                boy = self.childs[i]
+                if not boy.is_charged and not boy.is_in_corral:
+                    move = boy.move(self)
+                    self.make_child_move(i, move)
+
+            if self.moment > 0 and self.moment % self.t == 0:
+                dirty = self.object_percent(Dirty)
+                obstacles = self.object_percent(Obstacle)
+                self.reset(dirty, obstacles, self.childs, self.robot)
+
+            self.moment += 1
+
+        self.ended = True
+        self.tie = not self.win and not self.lost
+
+    def make_robot_move(self, move):
+        pass
+
+    def make_child_move(self, i , move):
+        pass
+
+    def object_percent(self, obt):
+        count = 0
+
+        for i in range(self.rows):
+            for j in range(self.columns):
+                if self.board[i][j] == obt:
+                    count += 1
+        
+        total = self.rows * self.columns
+
+        return count / total
 
     def gend(self, dirty):
         return self.generate_object(Dirty, dirty)
