@@ -1,5 +1,5 @@
 from random import randint
-from utils import Empty, Dirty, Dirty, Corral, Obstacle
+from utils import Empty, Dirty, Dirty, Corral, Obstacle, Children, Robot_Piece
 from utils import Up, Down, Left, Right, Stay, dx, dy
 from child import Child
 from robot import Robot
@@ -79,12 +79,7 @@ class Environment:
 
     def get_empty_pos(self):
         board = self.board
-        actioners = []
-
-        if self.childs and len(self.childs):
-            actioners += self.childs
-        if self.robot:
-            actioners += [self.robot]
+        actioners = self.get_actioners()
 
         others = [(x.i,x.j) for x in actioners] 
 
@@ -109,7 +104,27 @@ class Environment:
 
     def valid_position(self, x, y):
         return x >= 0 and y >= 0 and x <= self.rows - 1 and y <= self.columns
-    
+
+    def get_actioners(self):
+
+        actioners = []
+
+        if self.childs and len(self.childs):
+            actioners += self.childs
+        if self.robot:
+            actioners += [self.robot]
+        
+        return actioners
+
+    def get_piece(self, x, y):
+        actioners = self.get_actioners()
+
+        for act in actioners:
+            if act.i == x and act.j == y:
+                return act.type
+        
+        return self.board[x][y]
+
     def __str__(self):
         ans = ""
         for i in range(self.rows):

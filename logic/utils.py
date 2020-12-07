@@ -1,7 +1,7 @@
 
 from random import randint
 
-Empty, Dirty, Corral, Obstacle, Chilren, Robot = range(6)
+Empty, Dirty, Corral, Obstacle, Children, Robot_Piece = range(6)
 
 Up, Down, Left, Right, Stay = range(5)
 
