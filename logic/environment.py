@@ -106,6 +106,9 @@ class Environment:
     def generate(self, obj):
         i,j = self.get_empty_pos()
         self.board[i][j] = obj
+
+    def valid_position(self, x, y):
+        return x >= 0 and y >= 0 and x <= self.rows - 1 and y <= self.columns
     
     def __str__(self):
         ans = ""
