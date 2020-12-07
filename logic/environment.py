@@ -21,20 +21,26 @@ class Environment:
         self.corrales()
 
         if not childs:
+            self.robot = None
             self.childs = []
             
             for _ in range(self.n_childs):
-                self.childs.append(Child(self.board, self.childs))
-            self.robot = Robot(self.board, self.childs)
+                i, j = self.get_empty_pos()
+                self.childs.append(Child(i, j))
+
+            i, j = self.get_empty_pos()
+            self.robot = Robot(i, j)
             
         else:
             self.childs = childs
             self.robot = robot
 
             for i in range(len(self.childs)):
-                actioners = self.childs
-                self.childs[i].shuffle(self.board, actioners)
-            self.robot.shuffle(self.board, self.childs)
+                k,j = self.get_empty_pos()
+                self.childs[i].shuffle(k, j)
+
+            i,j = self.get_empty_pos()
+            self.robot.shuffle(i, j)
             
 
         self.gend(dirty)
@@ -52,7 +58,7 @@ class Environment:
 
         for i in range(self.rows):
             for j in range(self.columns):
-                if self.board[i,j] == obj:
+                if self.board[i][j] == obj:
                     count += 1
 
         total = self.rows * self.columns
@@ -107,13 +113,20 @@ class Environment:
             for j in range(self.columns):
                 pos = ""
                 for act in self.childs:
-                    if act.x == i and act.y == j:
+                    if act.i == i and act.j == j:
                         pos += " B "
 
-                if self.robot.x == i and self.robot.y == i:
+                if self.robot.i == i and self.robot.j == j:
                     pos += " R "
                 
                 piece = self.board[i][j]
+
+                if len(pos) > 3:
+                    print(f"Error at {i},{j} {pos}")
+                    
+                elif len(pos) == 3:
+                    ans += pos
+                    continue                
 
                 if piece == Empty:
                     pos += " - "
@@ -123,12 +136,10 @@ class Environment:
                     pos += " C "
                 elif piece == Obstacle:
                     pos += " O "
-
-                if len(pos) > 3:
-                    print(f"Error at {i},{j} {pos}")
                 
                 ans += pos
             ans += "\n"
+        return ans
 
     def __repr__(self):
         return str(self)
