@@ -94,3 +94,37 @@ class Environment:
     def generate(self, obj):
         i,j = self.get_empty_pos()
         self.board[i][j] = obj
+    
+    def __str__(self):
+        ans = ""
+        for i in range(self.rows):
+            for j in range(self.columns):
+                pos = ""
+                for act in self.childs:
+                    if act.x == i and act.y == j:
+                        pos += " B "
+
+                if self.robot.x == i and self.robot.y == i:
+                    pos += " R "
+                
+                piece = self.board[i][j]
+
+                if piece == Empty:
+                    pos += " - "
+                elif piece == Dirty:
+                    pos += " D "
+                elif piece == Corral:
+                    pos += " C "
+                elif piece == Obstacle:
+                    pos += " O "
+
+                if len(pos) > 3:
+                    print(f"Error at {i},{j} {pos}")
+                
+                ans += pos
+            ans += "\n"
+
+    def __repr__(self):
+        return str(self)
+
+
