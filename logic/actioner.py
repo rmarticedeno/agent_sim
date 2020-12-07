@@ -2,11 +2,11 @@ from utils import get_empty_pos
 
 class Actioner:
 
-    def __init__(self, board, actioners):
-        self.suffle(board, actioners)
+    def __init__(self, i, j):
+        self.suffle(i, j)
 
-    def suffle(self, board, actioners):
-        self.i, self.j = get_empty_pos(board, actioners)
+    def suffle(self, i, j):
+        self.i, self.j = i, j
 
     def action(self, board):
         pass
