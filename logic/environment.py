@@ -73,7 +73,13 @@ class Environment:
 
     def get_empty_pos(self):
         board = self.board
-        actioners = self.childs + [self.robot]
+        actioners = []
+
+        if self.childs and len(self.childs):
+            actioners += self.childs
+        if self.robot:
+            actioners += [self.robot]
+
         others = [(x.i,x.j) for x in actioners] 
 
         max_row = self.rows - 1
