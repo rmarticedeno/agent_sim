@@ -1,5 +1,5 @@
 from random import randint
-from utils import Empty, Dirty, Dirty, Corral, Obstacle, generate
+from utils import Empty, Dirty, Dirty, Corral, Obstacle
 from utils import Up, Down, Left, Right, Stay, dx, dy
 from child import Child
 from robot import Robot
@@ -42,12 +42,12 @@ class Environment:
         self.geno(obstacles)
 
     def gend(self, dirty):
-        return self.generate(Dirty, dirty)
+        return self.generate_object(Dirty, dirty)
 
     def geno(self, obstacles):
-        return self.generate(Obstacle, obstacles)
+        return self.generate_object(Obstacle, obstacles)
 
-    def generate(self, obj, percent):
+    def generate_object(self, obj, percent):
         count = 0
 
         for i in range(self.rows):
@@ -57,10 +57,8 @@ class Environment:
 
         total = self.rows * self.columns
 
-        actioners = self.childs + [self.robot]
-
         while ( count / total < percent):
-            generate(self.board, actioners, obj)
+            self.generate(obj)
             count +=1  
 
     def corrales(self):
@@ -71,3 +69,28 @@ class Environment:
                 self.board[i][0] = Corral
             else:
                 self.board[0][i] = Corral
+
+
+    def get_empty_pos(self):
+        board = self.board
+        actioners = self.childs + [self.robot]
+        others = [(x.i,x.j) for x in actioners] 
+
+        max_row = self.rows - 1
+        max_column = self.columns - 1
+
+        i = 0
+        j = 0
+
+        while(True):
+            i = randint(0, max_row)
+            j = randint(0, max_column)
+
+            if board[i][j] == Empty and (i,j) not in others:
+                break
+
+        return i,j
+
+    def generate(self, obj):
+        i,j = self.get_empty_pos()
+        self.board[i][j] = obj
