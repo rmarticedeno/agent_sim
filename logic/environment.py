@@ -234,4 +234,53 @@ class Environment:
     def __repr__(self):
         return str(self)
 
+    def get_surround_positions(self, x, y):
+        dx = [0 , 0, 1, -1, 1, -1, -1, 1]
+        dy = [1, -1, 0, 0, 1, -1, 1, -1]
 
+        acc = []
+
+        for i in range(8):
+            x_n = x + dx[i]
+            y_n = y + dy[i]
+            if self.valid_position(x_n , y_n):
+                acc.append((x_n, y_n))
+
+        return acc
+
+    def get_surround_object(self, x, y, obj):
+        pos = self.get_surround_positions(x, y)
+        result = []
+
+        
+        for (x,y) in pos:
+            if obj <= 4:
+                if self.board[x][y] == obj:
+                    result.append((x,y))
+
+            elif obj == Children:
+                for child in self.childs:
+                    if child.x == x and child.y == y:
+                        result.append((x,y))
+
+            else:
+                if self.robot.x == x and self.robot.y == y:
+                    result.append((x,y))
+
+        return result
+        
+    def is_empty(self, x, y):
+        for actioner in self.get_actioners():
+            if actioner.x == x and actioner.y == y:
+                return False
+        return self.valid_position(x,y) and self.board[x][y] == Empty
+
+    def possible_child_move(self, x, y , move):
+        x_n = x + dx[move]
+        y_n = y + dy[move]
+
+        if not self.is_empty(x_n, y_n):
+            return False
+        
+        if self.board[x_n][y_n] == Obstacle:
+            return self.possible_child_move(x_n, y_n, move)
