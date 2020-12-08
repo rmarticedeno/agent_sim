@@ -105,7 +105,33 @@ class Environment:
         self.tie = not self.win and not self.lost
 
     def make_robot_move(self, move):
-        pass
+        if move != Stay:
+
+            x = self.robot.i + dx[move]
+            y = self.robot.j + dy[move]
+
+            piece = self.board[x][y]
+
+            if piece == Children:
+                for k in range(self.n_childs):
+                    if self.childs[k].i == x and self.childs[k].j == y:
+                        self.childs[k].is_charged = True
+                        self.robot.charge_child = True
+
+            if piece == Corral:
+                for k in range(self.n_childs):
+                    if self.childs[k].is_charged:
+                        self.childs[k].is_charged = False
+                        self.childs[k].is_in_corral = True
+                        self.childs[k].i = x
+                        self.childs[k].j = y
+                        self.robot.charge_child = False
+
+            if piece == Dirty:
+                self.board[x][y] = Empty
+
+            self.robot.i = x
+            self.robot.j = y
 
     def make_child_move(self, i , move):
         x, y = self.childs[i].i, self.childs[i].j
