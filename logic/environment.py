@@ -1,4 +1,4 @@
-from random import randint
+from random import randint, choice
 from utils import Empty, Dirty, Dirty, Corral, Obstacle, Children, Robot_Piece
 from utils import Up, Down, Left, Right, Stay, dx, dy, dx_complete, dy_complete
 from child import Child
@@ -105,7 +105,22 @@ class Environment:
         pass
 
     def make_child_move(self, i , move):
-        pass
+        x, y = self.childs[i].x, self.childs[i].y
+
+        if self.possible_child_move(x, y, move):
+            x_n = x + dx[move]
+            y_n = y + dy[move]
+
+            self.childs[i].x = x_n
+            self.childs[i].y = y_n
+
+            if self.board[x_n, y_n] == Obstacle:
+                x_o, y_o = self.find_last_empty(x, y, move)
+                self.board[x_o][y_o] = Obstacle
+                self.board[x_n][y_n] = Empty
+
+        self.child_mess(x, y)
+
 
     def object_percent(self, obt):
         count = 0
@@ -248,7 +263,6 @@ class Environment:
     def get_surround_object(self, x, y, obj):
         pos = self.get_surround_positions(x, y)
         result = []
-
         
         for (x,y) in pos:
             if obj <= 4:
@@ -276,11 +290,42 @@ class Environment:
         x_n = x + dx[move]
         y_n = y + dy[move]
 
+        if self.valid_position(x_n,y_n) and self.board[x_n][y_n] == Obstacle:
+            return self.possible_child_move(x_n, y_n, move)
+
         if not self.is_empty(x_n, y_n):
             return False
         
-        if self.board[x_n][y_n] == Obstacle:
-            return self.possible_child_move(x_n, y_n, move)
+        return True
+            
+    def find_last_empty(self, x, y, move):
+        x_n = x + dx[move]
+        y_n = y + dy[move]
 
-    def push_objects(self, x, y, move):
-        
+        if self.is_empty(x_n, y_n):
+            return (x_n, y_n)
+
+        return self.find_last_empty(x_n, y_n, move)
+
+    def child_mess(self, x, y):
+        childs = len(self.get_surround_object(x,y, Children))
+
+        garbage = 1
+        if childs == 2:
+            garbage = 3
+        elif childs >= 3:
+            garbage = 6
+
+        surround = self.get_surround_object(x, y, Empty) + [(x,y)]
+
+        while True:
+            if not len(surround) or not garbage:
+                break
+
+            x, y = choice(surround)
+
+            self.board[x][y] = Dirty
+
+            surround.remove((x,y))
+
+            garbage -= 1
