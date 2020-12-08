@@ -8,6 +8,9 @@ Up, Down, Left, Right, Stay = range(5)
 dx = [0, 0, -1, 1]
 dy = [1, -1, 0, 0]
 
+dx_complete = [0 , 0, 1, -1, 1, -1, -1, 1]
+dy_complete = [1, -1, 0, 0, 1, -1, 1, -1]
+
 def generate(board, actioners, obj):
     i,j = get_empty_pos(board, actioners)
     board[i][j] = obj

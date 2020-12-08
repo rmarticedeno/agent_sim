@@ -1,6 +1,6 @@
 from random import randint
 from utils import Empty, Dirty, Dirty, Corral, Obstacle, Children, Robot_Piece
-from utils import Up, Down, Left, Right, Stay, dx, dy
+from utils import Up, Down, Left, Right, Stay, dx, dy, dx_complete, dy_complete
 from child import Child
 from robot import Robot
 
@@ -234,15 +234,12 @@ class Environment:
     def __repr__(self):
         return str(self)
 
-    def get_surround_positions(self, x, y):
-        dx = [0 , 0, 1, -1, 1, -1, -1, 1]
-        dy = [1, -1, 0, 0, 1, -1, 1, -1]
-
+    def get_surround_positions(self, x, y): 
         acc = []
 
         for i in range(8):
-            x_n = x + dx[i]
-            y_n = y + dy[i]
+            x_n = x + dx_complete[i]
+            y_n = y + dy_complete[i]
             if self.valid_position(x_n , y_n):
                 acc.append((x_n, y_n))
 
@@ -284,3 +281,6 @@ class Environment:
         
         if self.board[x_n][y_n] == Obstacle:
             return self.possible_child_move(x_n, y_n, move)
+
+    def push_objects(self, x, y, move):
+        
