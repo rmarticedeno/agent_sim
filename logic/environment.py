@@ -70,8 +70,8 @@ class Environment:
                     break
             else:
                 dirty = False
-                for i in self.rows:
-                    for j in self.columns:
+                for i in range(self.rows):
+                    for j in range(self.columns):
                         if self.board[i][j] == Dirty:
                             dirty = True
                             break
@@ -96,8 +96,8 @@ class Environment:
                 obstacles = self.object_percent(Obstacle)
                 self.reset(dirty, obstacles, self.childs, self.robot)
 
-            # print(self)
-            # input()
+            print(self)
+            input()
 
             self.moment += 1
 
@@ -110,11 +110,12 @@ class Environment:
             x = self.robot.i + dx[move]
             y = self.robot.j + dy[move]
 
-            piece = self.board[x][y]
+            piece = self.get_piece(x,y)
 
             if piece == Children:
                 for k in range(self.n_childs):
                     if self.childs[k].i == x and self.childs[k].j == y:
+                        print("entro")
                         self.childs[k].is_charged = True
                         self.robot.charge_child = True
 
@@ -358,3 +359,24 @@ class Environment:
             surround.remove((x,y))
 
             garbage -= 1
+
+    def find_nearest_object_by_func(self, x, y, func):
+        distance = [[-1] * self.columns for i in range(self.rows)]
+
+        for i in range(self.rows):
+            for j in range(self.columns):
+                distance[i][j] = abs(i - x) + abs(y - x)
+
+        _min = self.rows * self.columns
+
+        for i in range(self.rows):
+            for j in range(self.columns):
+                dist = distance[i][j]
+                if func(i, j, self) and dist > 0 and dist < _min:
+                    _min = dist
+
+        for i in range(self.rows):
+            for j in range(self.columns):
+                if distance[i][j] == _min and func(i,j,self):
+                    return i, j, distance[i][j]
+        
