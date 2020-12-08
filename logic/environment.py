@@ -81,14 +81,14 @@ class Environment:
                     self.win = True
                     break
             
-            move = self.robot.move(self)
+            move = self.robot.action(self)
 
             self.make_robot_move(move)
 
             for i in range(self.n_childs):
                 boy = self.childs[i]
                 if not boy.is_charged and not boy.is_in_corral:
-                    move = boy.move(self)
+                    move = boy.action(self)
                     self.make_child_move(i, move)
 
             if self.moment > 0 and self.moment % self.t == 0:
