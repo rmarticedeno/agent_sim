@@ -123,9 +123,32 @@ Dr. Yudivián Almeida Cruz, \emph{Facultad de Matemática y Computación, Univer
 %===================================================================================
 % Introducción
 %-----------------------------------------------------------------------------------
-\section{Descripción de la solución propuesta}\label{sec:intro}
+\section{Características principales del entorno}\label{sec:intro}
 %-----------------------------------------------------------------------------------
-	Para dar solución al problema propuesto se realizo una implementación en el lenguaje de programación Python que se encuentra en la carpeta logic de este proyecto. 
+	El entorno que se propuso como ejercicio tiene varias características importantes a tener en cuenta. La primera es que es un entorno de información completa, es decir que cada agente posee información al respecto del estado o posición en este caso de todos los objetos de la simulación. La segunda característica del entorno radica en su comportamiento dinámico, es decir cada una unidad de tiempo conocida se riegan los objetos.
+	
+	De estas dos características se desprenden las estrategias a seguir por cada uno de los agentes. Dado que se puede disponer de información global y no solo de información local. También es importante tener en cuenta que un agente que base sus decisiones en un registro de las que ya ha tomado sería menos efectivo que otro agente que toma las decisiones basándose en sólo su estado actual.
+	
+	Tomando en consideración las características de los ambientes dejadas en la literatura, el entorno propuesto es :
+	
+	\begin{itemize}
+		\item Accesible, dado que se posee información completa en cada momento de la simulación.
+		\item Determinista, dado que cada acción tiene una unica consecuencia.
+		\item Episódico, dado que las decisiones de los agentes no dependen de corridas anteriores.
+		\item Dinámico, dado que cada t unidades de tiempo se riegan los objetos del entorno.
+		\item Discreto, dado que existen un numero finito de acciones a realizar por parte de los agentes.
+	\end{itemize}
+	
+	
+\section{Modelación de la simulación}
+
+	Para darle solución al problema propuesto se empleó el lenguaje de programación python y el código fuente se encuentra dentro de la carpeta logic del proyecto. A la hora de implementar tanto los agentes como los niños se tomó la convención de que cada implementación tomaba la acción que iba a realizar y el entorno era el que la ejecutaba. El entorno, específico para el problema propuesto contiene todo el peso de la solución. Dejando a los agentes y bebés la simplicidad de solo tomar la acción a realizar.
+	
+\section{Agentes}
+	
+	Se tomaron en consideración dos modelos de agentes reactivos. Uno que no aprovecha la capacidad de la información completa del entorno y uno que sí la tiene en cuenta. Ambos agentes tienen dos estados internos que responden a las situaciones resultantes de si tienen cargado a un bebé y el caos en que no lo tengan cargado.
+	
+	Es imporante destacar que el agente que no aprovecha la característica accesible del ambiente posee una función de costo o beneficio que determina de forma indirecta la acción a realizar. Mientras que el agente que sí aprovecha la accesibilidad del entorno ejecuta tareas de forma directa bajo un comportamiento programado.
 
 %===================================================================================
 
