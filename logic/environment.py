@@ -96,6 +96,9 @@ class Environment:
                 obstacles = self.object_percent(Obstacle)
                 self.reset(dirty, obstacles, self.childs, self.robot)
 
+            # print(self)
+            # input()
+
             self.moment += 1
 
         self.ended = True
@@ -105,16 +108,16 @@ class Environment:
         pass
 
     def make_child_move(self, i , move):
-        x, y = self.childs[i].x, self.childs[i].y
+        x, y = self.childs[i].i, self.childs[i].j
 
         if self.possible_child_move(x, y, move):
             x_n = x + dx[move]
             y_n = y + dy[move]
 
-            self.childs[i].x = x_n
-            self.childs[i].y = y_n
+            self.childs[i].i = x_n
+            self.childs[i].j = y_n
 
-            if self.board[x_n, y_n] == Obstacle:
+            if self.board[x_n][y_n] == Obstacle:
                 x_o, y_o = self.find_last_empty(x, y, move)
                 self.board[x_o][y_o] = Obstacle
                 self.board[x_n][y_n] = Empty
@@ -190,7 +193,7 @@ class Environment:
         self.board[i][j] = obj
 
     def valid_position(self, x, y):
-        return x >= 0 and y >= 0 and x <= self.rows - 1 and y <= self.columns
+        return x >= 0 and y >= 0 and x < self.rows - 1 and y < self.columns
 
     def get_actioners(self):
 
@@ -282,7 +285,7 @@ class Environment:
         
     def is_empty(self, x, y):
         for actioner in self.get_actioners():
-            if actioner.x == x and actioner.y == y:
+            if actioner.i == x and actioner.j == y:
                 return False
         return self.valid_position(x,y) and self.board[x][y] == Empty
 

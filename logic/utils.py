@@ -5,8 +5,8 @@ Empty, Dirty, Corral, Obstacle, Children, Robot_Piece = range(6)
 
 Up, Down, Left, Right, Stay = range(5)
 
-dx = [0, 0, -1, 1]
-dy = [1, -1, 0, 0]
+dx = [0, 0, -1, 1, 0]
+dy = [1, -1, 0, 0, 0]
 
 dx_complete = [0 , 0, 1, -1, 1, -1, -1, 1]
 dy_complete = [1, -1, 0, 0, 1, -1, 1, -1]
