@@ -1,4 +1,3 @@
-from utils import get_empty_pos
 
 class Actioner:
 
