@@ -1,15 +1,15 @@
 from random import randint, choice
-from utils import Empty, Dirty, Corral, Obstacle, Children, Robot_Piece
-from utils import Up, Down, Left, Right, Stay, dx, dy, dx_complete, dy_complete
-from child import Child
-from robot import Robot
+from .utils import Empty, Dirty, Corral, Obstacle, Children, Robot_Piece
+from .utils import Up, Down, Left, Right, Stay, dx, dy, dx_complete, dy_complete
+from .child import Child
+from .robot import Robot
 
 
 
 
 class Environment:
 
-    def __init__(self, rows, columns, n_childs, dirty, obstacles, t, childs = None, robot = None):
+    def __init__(self, rows, columns, n_childs, dirty, obstacles, t, childs = None, robot = None, strategy_one = False):
         self.rows = rows
         self.columns = columns
         self.n_childs = n_childs
@@ -17,6 +17,7 @@ class Environment:
         self.init_dirty = dirty
         self.init_obst = obstacles
         self.t = t
+        self.strategy_one = strategy_one
 
     def reset(self, dirty, obstacles, childs = None, robot = None, complete=False):
         if complete:
@@ -25,6 +26,7 @@ class Environment:
             self.lost = False
             self.win = False
             self.ended = False
+            self.dirty = 0
 
         self.board = [ [Empty] * self.columns for i in range(self.rows)]
 
@@ -39,7 +41,7 @@ class Environment:
                 self.childs.append(Child(i, j))
 
             i, j = self.get_empty_pos()
-            self.robot = Robot(i, j, False)
+            self.robot = Robot(i, j, self.strategy_one)
             
         else:
             self.childs = childs
@@ -61,8 +63,12 @@ class Environment:
         self.reset(self.init_dirty, self.init_obst, complete=True)
 
         while (self.moment < 100*self.t):
+            
+            dirty = self.object_percent(Dirty)
 
-            if self.object_percent(Dirty) >= 0.6:    
+            self.dirty += dirty
+
+            if dirty >= 0.6:    
                 self.lost = True
                 break
             

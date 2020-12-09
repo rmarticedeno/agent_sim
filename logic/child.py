@@ -1,5 +1,5 @@
-from actioner import Actioner
-from utils import Children, Up, Down, Left, Right, Stay
+from .actioner import Actioner
+from .utils import Children, Up, Down, Left, Right, Stay
 from random import randint
 
 class Child(Actioner):

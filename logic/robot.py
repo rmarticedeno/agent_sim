@@ -1,5 +1,5 @@
-from actioner import Actioner
-from utils import Empty, Dirty, Corral, Obstacle, Children, Robot_Piece, dx, dy, Up, Down, Left, Right, Stay 
+from .actioner import Actioner
+from .utils import Empty, Dirty, Corral, Obstacle, Children, Robot_Piece, dx, dy, Up, Down, Left, Right, Stay 
 from random import choice
 
 class Robot(Actioner):
